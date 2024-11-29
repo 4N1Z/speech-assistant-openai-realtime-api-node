@@ -12,9 +12,17 @@
   "type": "module",
   "dependencies": {
     "@fastify/formbody": "^8.0.0",
+    "@fastify/static": "^8.0.3",
     "@fastify/websocket": "^11.0.0",
     "dotenv": "^16.4.5",
     "fastify": "^5.0.0",
-    "ws": "^8.18.0"
+    "ngrok": "^5.0.0-beta.2",
+    "twilio": "^5.3.6",
+    "ws": "^8.18.0",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "tailwindcss": "latest",
+    "@tailwindcss/forms": "latest"
   }
 }
