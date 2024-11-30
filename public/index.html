@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Make Outbound Call</title>
+    <title>Make Call</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,26 +11,19 @@
             margin: 40px auto;
             padding: 20px;
         }
-        .container {
-            background-color: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
             margin-bottom: 5px;
-            font-weight: bold;
         }
         input[type="tel"] {
             width: 100%;
             padding: 8px;
+            font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-size: 16px;
         }
         button {
             background-color: #4CAF50;
@@ -44,7 +37,7 @@
         button:hover {
             background-color: #45a049;
         }
-        #status {
+        .status {
             margin-top: 20px;
             padding: 10px;
             border-radius: 4px;
@@ -60,52 +53,44 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Make Outbound Call</h1>
-        <form id="callForm">
-            <div class="form-group">
-                <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" 
-                       placeholder="+1234567890" required
-                       pattern="^\+?[1-9]\d{1,14}$">
-                <small>Format: +1234567890 (include country code)</small>
-            </div>
-            <button type="submit">Make Call</button>
-        </form>
-        <div id="status"></div>
+    <h1>Make a Call</h1>
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="tel" id="phoneNumber" placeholder="+1234567890" required>
     </div>
+    <button onclick="makeCall()">Make Call</button>
+    <div id="status" class="status" style="display: none;"></div>
 
     <script>
-        document.getElementById('callForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const statusDiv = document.getElementById('status');
+        async function makeCall() {
             const phoneNumber = document.getElementById('phoneNumber').value;
+            const statusDiv = document.getElementById('status');
 
             try {
-                statusDiv.innerHTML = 'Initiating call...';
-                statusDiv.className = '';
-
                 const response = await fetch('/make-call', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ phoneNumber })
+                    body: JSON.stringify({ phoneNumber }),
                 });
 
                 const data = await response.json();
 
-                if (data.success) {
-                    statusDiv.innerHTML = `Call initiated successfully! Call SID: ${data.callSid}`;
-                    statusDiv.className = 'success';
+                if (response.ok) {
+                    statusDiv.className = 'status success';
+                    statusDiv.textContent = `Call initiated successfully! Call SID: ${data.callSid}`;
                 } else {
-                    throw new Error(data.error || 'Failed to initiate call');
+                    statusDiv.className = 'status error';
+                    statusDiv.textContent = data.error || 'Failed to make call';
                 }
             } catch (error) {
-                statusDiv.innerHTML = `Error: ${error.message}`;
-                statusDiv.className = 'error';
+                statusDiv.className = 'status error';
+                statusDiv.textContent = 'Error: Could not connect to server';
             }
-        });
+
+            statusDiv.style.display = 'block';
+        }
     </script>
 </body>
 </html> 
