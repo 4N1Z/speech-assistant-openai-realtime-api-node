@@ -85,7 +85,7 @@ Section 4: Challenges and Follow-Up Needs
 </Questions>
 `;
 
-const VOICE = "alloy";
+const VOICE = "verse";
 const PORT = process.env.PORT || 5050; // Allow dynamic port assignment
 
 // List of Event Types to log to the console. See the OpenAI Realtime API Documentation: https://platform.openai.com/docs/api-reference/realtime
